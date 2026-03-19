@@ -1,0 +1,38 @@
+[
+  {
+    "check_date": "2026-03-19",
+    "flight_date": "2026-04-18",
+    "price": 467,
+    "route": "EYW-XNA"
+  },
+  {
+    "check_date": "2026-03-19",
+    "flight_date": "2026-05-18",
+    "price": 409,
+    "route": "EYW-XNA"
+  },
+  {
+    "check_date": "2026-03-19",
+    "flight_date": "2026-06-17",
+    "price": 495,
+    "route": "EYW-XNA"
+  },
+  {
+    "check_date": "2026-03-19",
+    "flight_date": "2026-04-18",
+    "price": 562,
+    "route": "XNA-EYW"
+  },
+  {
+    "check_date": "2026-03-19",
+    "flight_date": "2026-05-18",
+    "price": 701,
+    "route": "XNA-EYW"
+  },
+  {
+    "check_date": "2026-03-19",
+    "flight_date": "2026-06-17",
+    "price": 462,
+    "route": "XNA-EYW"
+  }
+]
