@@ -5,10 +5,12 @@ import os
 from life360 import Life360
 from datetime import datetime
 
-# Coordinates for Cow Key Channel Bridge (The "Entry" to Key West proper)
+# CONFIGURATION
 KW_ENTRY_LAT = 24.5714
 KW_ENTRY_LNG = -81.7583
-GEOFENCE_RADIUS_KM = 0.5 # 500 meters
+JAYME_WORK_LAT = 24.5800 # Placeholder for Jayme's work on Stock Island
+JAYME_WORK_LNG = -81.7300
+GEOFENCE_RADIUS_KM = 0.5
 
 def haversine(lat1, lon1, lat2, lon2):
     import math
@@ -37,28 +39,42 @@ async def main():
                 pass
 
     async with aiohttp.ClientSession() as session:
-        api = Life360(session, max_retries=3)
-        # Mocking the actual logic for this turn to avoid hitting real API in every thought
-        # In a real environment, we would use api.get_circles() and api.get_circle_members()
+        # Note: In real usage, this would be: 
+        # api = Life360(session, max_retries=3)
+        # members = await api.get_circle_members(circle_id)
         
-        # Simulation for Steve (simulating he just crossed the bridge)
+        # MOCK DATA for Simulation
         members = [
-            {"name": "Steve", "lat": 24.5710, "lng": -81.7590}, # Just inside
-            {"name": "Jayme", "lat": 24.5800, "lng": -81.7000}  # Still on Stock Island
+            {"name": "Steve", "lat": 24.5710, "lng": -81.7590, "battery": 85, "on_water": False},
+            {"name": "Jayme", "lat": 24.5700, "lng": -81.7100, "battery": 12, "on_water": True}
         ]
 
         alerts = []
         for m in members:
-            dist = haversine(m['lat'], m['lng'], KW_ENTRY_LAT, KW_ENTRY_LNG)
-            is_inside = dist <= GEOFENCE_RADIUS_KM
-            prev_inside = state.get(m['name'], False)
+            # 1. Bridge Alert (Entering KW)
+            dist_bridge = haversine(m['lat'], m['lng'], KW_ENTRY_LAT, KW_ENTRY_LNG)
+            is_inside_kw = dist_bridge <= GEOFENCE_RADIUS_KM
+            prev_inside_kw = state.get(f"{m['name']}_in_kw", False)
+            if is_inside_kw and not prev_inside_kw:
+                alerts.append(f"🚢 Bridge Alert: {m['name']} just crossed into Key West! 🍹")
+            state[f"{m['name']}_in_kw"] = is_inside_kw
 
-            if is_inside and not prev_inside:
-                alerts.append(f"🚢 Bridge Alert: {m['name']} just crossed into Key West! Time to get those drinks ready. 🍹")
-            
-            state[m['name']] = is_inside
+            # 2. Commute Sync (Jayme leaving work)
+            if m['name'] == "Jayme":
+                dist_work = haversine(m['lat'], m['lng'], JAYME_WORK_LAT, JAYME_WORK_LNG)
+                is_at_work = dist_work <= GEOFENCE_RADIUS_KM
+                prev_at_work = state.get("jayme_at_work", True) # Default to True
+                if not is_at_work and prev_at_work:
+                    alerts.append(f"🚗 Commute Sync: Jayme has left work! Running traffic report for her drive home...")
+                    # Logic to trigger traffic report would happen in the requester turn
+                state["jayme_at_work"] = is_at_work
 
-        # Save new state
+            # 3. Boat Safety (Battery checks while on water)
+            if m.get('on_water'):
+                if m['battery'] < 15:
+                    alerts.append(f"⚠️ BOAT SAFETY: {m['name']} is on the water with low battery ({m['battery']}%). Checking location...")
+
+        # Save state
         with open(state_file, 'w') as f:
             json.dump(state, f)
 
