@@ -1,11 +1,12 @@
 import os
 import requests
 import googlemaps
-from datetime import datetime
+from datetime import datetime, timedelta
 
 STATIONS = ["8724580", "KYWF1", "SANF1"] # Harbor, Airport, Sand Key
+TIDE_STATION = "8724580" # Key West Harbor
 NWS_URL = "https://api.weather.gov/gridpoints/EYW/68,26/forecast"
-HEADERS = {'User-Agent': 'KeyWestSurfReport/1.4 (Contact: steven@devops.local)'}
+HEADERS = {'User-Agent': 'KeyWestSurfReport/1.5 (Contact: steven@devops.local)'}
 
 # Key West coordinates for Google Environmental APIs
 LAT = 24.5551
@@ -21,6 +22,23 @@ def get_water_temp():
         except:
             continue
     return 79.5, "Inferred (Seasonal Avg)"
+
+def get_tide_data():
+    """Fetches high and low tides for today."""
+    today = datetime.now().strftime("%Y%m%d")
+    url = f"https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?begin_date={today}&range=24&station={TIDE_STATION}&product=predictions&datum=MLLW&time_zone=lst_ldt&interval=hilo&units=english&format=json"
+    try:
+        res = requests.get(url, headers=HEADERS, timeout=5).json()
+        if 'predictions' in res:
+            tides = []
+            for p in res['predictions']:
+                t_type = "High" if p['type'] == 'H' else "Low"
+                t_time = datetime.strptime(p['t'], "%Y-%m-%d %H:%M").strftime("%I:%M %p")
+                tides.append(f"{t_type} at {t_time} ({p['v']} ft)")
+            return " | ".join(tides)
+    except:
+        pass
+    return "Tide data unavailable"
 
 def get_nws_data():
     try:
@@ -74,7 +92,6 @@ def get_google_air_quality():
                     aqi = index['aqi']
                     category = index['category']
                     return f"🍃 AIR QUALITY: {aqi} AQI ({category})"
-            # Fallback if specific AQI code isn't listed
             idx = res['indexes'][0]
             return f"🍃 AIR QUALITY: {idx['aqi']} AQI ({idx['category']})"
     except Exception as e:
@@ -105,6 +122,7 @@ def get_google_pollen():
 
 def main():
     temp, source = get_water_temp()
+    tides = get_tide_data()
     wind, outlook = get_nws_data()
     fl511 = get_fl511_traffic()
     google_traffic = get_google_directions()
@@ -130,6 +148,7 @@ def main():
     if pollen:
         print(pollen)
     print(f"🚩 FLAG STATUS: {flag}")
+    print(f"🌊 TIDES: {tides}")
     print(f"🌡️ WATER TEMP: {temp}°F (Source: {source})")
     print(f"💨 WIND: {wind}")
     print(f"🌦️ OUTLOOK: {outlook}")
