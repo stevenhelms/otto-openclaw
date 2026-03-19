@@ -1,5 +1,5 @@
 # HEARTBEAT.md
 - Morning Surf Report: Once a day around 6:30 AM Eastern (10:30 UTC), check the Key West weather forecast, local ocean temperature, and current beach flag color, plus Air Quality and Pollen. Send a morning briefing to Steve. Do not repeat if already sent today.
 - Pre-Commute Traffic Report: Once a day around 7:30 AM Eastern (11:30 UTC), run the key-west-traffic-report skill to check live drive time from Stock Island to FKAA and FL511 alerts. Send to Steve. Do not repeat if already sent today.
-- Daily News Briefing: Once a day around 8:00 AM Eastern (12:00 UTC), run `source .venv/bin/activate && python3 skills/fetch_news.py` to gather world headlines, AP national news, and Trump/X updates. Send the formatted report to Steve. Do not repeat if already sent today.
+- Daily News Briefing: Once a day around 8:00 AM Eastern (12:00 UTC), run the key-west-news-briefing skill to gather world headlines, AP national news, and Trump/X updates. Send the formatted report to Steve. Do not repeat if already sent today.
 - Nightly Token/Cost Recap: Once a day, 10 minutes after sunset in Key West, check the current token usage and estimated API cost. Send a daily recap to Steve. Do not repeat if already sent today.
