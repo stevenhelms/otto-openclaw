@@ -101,15 +101,15 @@ def get_google_air_quality():
     url = f"https://airquality.googleapis.com/v1/currentConditions:lookup?key={api_key}"
     try:
         res = requests.post(url, json={"location": {"latitude": LAT, "longitude": LNG}}, timeout=5).json()
-        if "indexes" in res:
-            for index in res["indexes"]:
-                if index["code"] == "aqi":
-                    return f"🍃 AIR QUALITY: {index['aqi']} AQI ({index['category']})"
-            idx = res["indexes"][0]
+        indexes = res.get("indexes", [])
+        if indexes:
+            # Prefer the dedicated 'aqi' index; fall back to the first available index
+            idx = next((i for i in indexes if i.get("code") == "aqi"), indexes[0])
             return f"🍃 AIR QUALITY: {idx['aqi']} AQI ({idx['category']})"
     except Exception as e:
         return f"⚠️ AQI Error: {e}"
     return "🍃 AIR QUALITY: Unavailable right now"
+
 
 
 def get_google_pollen():
