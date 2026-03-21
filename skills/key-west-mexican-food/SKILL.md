@@ -8,5 +8,8 @@ description: A curated guide and real-time status tracker for Mexican food in Ke
 ## Instructions
 Use this skill when Steve is hungry for Mexican food or wants to know the best spot for the current conditions.
 
+## Optimization
+This skill should be run as a **Cron Job** when possible to save session context tokens.
+
 ## Usage
 source .venv/bin/activate && python3 {baseDir}/scripts/mexican_guide.py

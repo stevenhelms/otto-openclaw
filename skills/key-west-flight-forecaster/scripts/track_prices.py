@@ -8,13 +8,11 @@ def get_serp_api_prices(api_key, departure_id="EYW", arrival_id="XNA"):
     if not api_key:
         return {"error": "SERPAPI_API_KEY missing"}
     
-    # We'll check prices for a few standard offsets: 1 month, 2 months, 3 months out
     results = []
     offsets = [30, 60, 90]
     
     for offset in offsets:
         outbound_date = (datetime.now() + timedelta(days=offset)).strftime("%Y-%m-%d")
-        # Returning a week later
         return_date = (datetime.now() + timedelta(days=offset+7)).strftime("%Y-%m-%d")
         
         url = "https://serpapi.com/search.json"
@@ -54,9 +52,14 @@ def main():
     eyw_to_xna = get_serp_api_prices(api_key, "EYW", "XNA")
     xna_to_eyw = get_serp_api_prices(api_key, "XNA", "EYW")
     
-    new_data = eyw_to_xna + xna_to_eyw
+    if isinstance(eyw_to_xna, dict) and "error" in eyw_to_xna:
+        new_data = eyw_to_xna
+    elif isinstance(xna_to_eyw, dict) and "error" in xna_to_eyw:
+        new_data = xna_to_eyw
+    else:
+        new_data = eyw_to_xna + xna_to_eyw
     
-    if not new_data or "error" in str(new_data):
+    if not new_data or (isinstance(new_data, dict) and "error" in new_data):
         print(f"--- ✈️ FLIGHT TRACKER ERROR ---\n{new_data}")
         return
 

@@ -2,6 +2,11 @@ import os
 import requests
 import googlemaps
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
+
+# This loads the .env file if it exists. 
+# By default, it will NOT overwrite existing system environment variables.
+load_dotenv()
 
 STATIONS = ["8724580", "KYWF1", "SANF1"] # Harbor, Airport, Sand Key
 TIDE_STATION = "8724580" # Key West Harbor

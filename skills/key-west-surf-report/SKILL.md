@@ -10,6 +10,9 @@ Use this skill when Steven asks for the "Surf Report," "Beach Conditions," or "H
 
 This skill implements a failover logic: if the primary Key West Harbor station is reporting suspect data, it automatically pivots to secondary offshore sensors (Sand Key/Peterson Key).
 
+## Optimization
+This skill should be run as a **Cron Job** when possible to save session context tokens.
+
 ## Usage
 uv run {baseDir}/scripts/fetch_surf_report.py
 

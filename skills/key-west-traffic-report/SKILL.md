@@ -6,6 +6,9 @@ description: Monitors US-1 traffic and FL511 incidents for the Key West commute.
 # Instructions
 Run this skill when Steven asks "What's the drive look like?" or "Any traffic today?"
 
+## Optimization
+This skill should be run as a **Cron Job** when possible to save session context tokens.
+
 # Usage
 uv run {baseDir}/scripts/fetch_traffic_report.py
 

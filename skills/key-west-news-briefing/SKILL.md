@@ -8,6 +8,9 @@ description: Aggregates international, national, and Trump-specific news via RSS
 ## Instructions
 Use this skill when Steve asks for "The news," "Morning briefing," or "What's happening in the world?"
 
+## Optimization
+This skill should be run as a **Cron Job** when possible to save session context tokens.
+
 ## Usage
 source .venv/bin/activate && python3 {baseDir}/scripts/fetch_news.py
 
