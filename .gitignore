@@ -2,3 +2,7 @@
 __pycache__/
 *.pyc
 .DS_Store
+
+# Skill environment files — never commit secrets
+skills/**/.env
+skills/**/scripts/.env
