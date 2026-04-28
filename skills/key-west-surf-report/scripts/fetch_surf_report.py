@@ -112,7 +112,7 @@ def get_google_air_quality():
     url = "https://airquality.googleapis.com/v1/currentConditions:lookup"
     params = {"key": api_key}
     try:
-        res = requests.post(url, params=params, json={"location": {"latitude": LAT, "longitude": LNG}}, timeout=5).json()
+        res = requests.post(url, params=params, headers=HEADERS, json={"location": {"latitude": LAT, "longitude": LNG}}, timeout=5).json()
         indexes = res.get("indexes", [])
         if indexes:
             # Prefer the dedicated 'aqi' index; fall back to the first available index
@@ -136,7 +136,7 @@ def get_google_pollen():
         "days": 1
     }
     try:
-        res = requests.get(url, params=params, timeout=5).json()
+        res = requests.get(url, params=params, headers=HEADERS, timeout=5).json()
         if "dailyInfo" in res:
             active = [
                 f"{p.get('displayName')} ({p.get('indexInfo', {}).get('value', 0)})"
