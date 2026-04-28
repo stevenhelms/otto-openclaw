@@ -21,14 +21,18 @@ LNG = -81.7800
 
 
 def get_water_temp():
+    url = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter"
     for station in STATIONS:
-        url = (
-            f"https://api.tidesandcurrents.noaa.gov/api/prod/datagetter"
-            f"?date=latest&station={station}&product=water_temperature"
-            f"&units=english&time_zone=lst_ldt&format=json"
-        )
+        params = {
+            "date": "latest",
+            "station": station,
+            "product": "water_temperature",
+            "units": "english",
+            "time_zone": "lst_ldt",
+            "format": "json"
+        }
         try:
-            res = requests.get(url, headers=HEADERS, timeout=5).json()
+            res = requests.get(url, params=params, headers=HEADERS, timeout=5).json()
             if "data" in res:
                 return float(res["data"][0]["v"]), station
         except Exception:
@@ -41,14 +45,21 @@ def get_tide_data():
     today = (
         __import__("datetime").datetime.now().strftime("%Y%m%d")
     )
-    url = (
-        f"https://api.tidesandcurrents.noaa.gov/api/prod/datagetter"
-        f"?begin_date={today}&range=24&station={TIDE_STATION}&product=predictions"
-        f"&datum=MLLW&time_zone=lst_ldt&interval=hilo&units=english&format=json"
-    )
+    url = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter"
+    params = {
+        "begin_date": today,
+        "range": "24",
+        "station": TIDE_STATION,
+        "product": "predictions",
+        "datum": "MLLW",
+        "time_zone": "lst_ldt",
+        "interval": "hilo",
+        "units": "english",
+        "format": "json"
+    }
     try:
         from datetime import datetime as _dt
-        res = requests.get(url, headers=HEADERS, timeout=5).json()
+        res = requests.get(url, params=params, headers=HEADERS, timeout=5).json()
         if "predictions" in res:
             tides = []
             for p in res["predictions"]:
@@ -98,9 +109,10 @@ def get_google_air_quality():
     api_key = os.getenv("GOOGLE_PLACES_API_KEY")
     if not api_key:
         return None
-    url = f"https://airquality.googleapis.com/v1/currentConditions:lookup?key={api_key}"
+    url = "https://airquality.googleapis.com/v1/currentConditions:lookup"
+    params = {"key": api_key}
     try:
-        res = requests.post(url, json={"location": {"latitude": LAT, "longitude": LNG}}, timeout=5).json()
+        res = requests.post(url, params=params, json={"location": {"latitude": LAT, "longitude": LNG}}, timeout=5).json()
         indexes = res.get("indexes", [])
         if indexes:
             # Prefer the dedicated 'aqi' index; fall back to the first available index
@@ -116,12 +128,15 @@ def get_google_pollen():
     api_key = os.getenv("GOOGLE_PLACES_API_KEY")
     if not api_key:
         return None
-    url = (
-        f"https://pollen.googleapis.com/v1/forecast:lookup"
-        f"?key={api_key}&location.latitude={LAT}&location.longitude={LNG}&days=1"
-    )
+    url = "https://pollen.googleapis.com/v1/forecast:lookup"
+    params = {
+        "key": api_key,
+        "location.latitude": LAT,
+        "location.longitude": LNG,
+        "days": 1
+    }
     try:
-        res = requests.get(url, timeout=5).json()
+        res = requests.get(url, params=params, timeout=5).json()
         if "dailyInfo" in res:
             active = [
                 f"{p.get('displayName')} ({p.get('indexInfo', {}).get('value', 0)})"
