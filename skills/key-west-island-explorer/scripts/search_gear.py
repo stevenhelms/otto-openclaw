@@ -23,11 +23,11 @@ def get_local_knowledge() -> dict:
 
 def search_craigslist(query, city="keys"):
     """Basic Craigslist scraper for the Florida Keys."""
-    url = f"https://{city}.craigslist.org/search/sss?query={query}"
+    url = f"https://{city}.craigslist.org/search/sss"
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
 
     try:
-        r = requests.get(url, headers=headers, timeout=10)
+        r = requests.get(url, params={"query": query}, headers=headers, timeout=10)
         soup = BeautifulSoup(r.text, "html.parser")
         results = []
 
