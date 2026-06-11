@@ -50,10 +50,9 @@ run_logged_print_heartbeat() {
       echo "still running $label ($((now - started_at))s elapsed)"
     fi
   done
-  set +e
-  wait "$command_pid"
-  status=$?
-  set -e
+  if ! wait "$command_pid"; then
+    status=$?
+  fi
   docker_e2e_print_log "$log_file"
   rm -f "$log_file"
   return "$status"
