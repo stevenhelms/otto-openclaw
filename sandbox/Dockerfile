@@ -8,7 +8,7 @@ USER root
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Ensure python3-pip and python3-venv are in your defaults if not passed by script
-ARG PACKAGES="curl wget jq coreutils grep nodejs npm python3 python3-pip python3-venv git ca-certificates golang-go rustc cargo unzip pkg-config libasound2-dev build-essential file gnupg"
+ARG PACKAGES="curl wget jq coreutils grep nodejs npm python3 python3-pip python3-venv git ca-certificates golang-go rustc cargo unzip pkg-config libasound2-dev build-essential file gnupg dnsutils"
 ARG PYTHON_PACKAGES="numpy pandas requests bs4 googlemaps python-dotenv"
 ARG INSTALL_PNPM=1
 ARG INSTALL_GH=1

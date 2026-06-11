@@ -13,7 +13,7 @@ warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
 MAX_LENGTH = 300
 
 RSS_SOURCES = {
-    "🌍 International (BBC/Reuters)": "http://feeds.bbci.co.uk/news/world/rss.xml",
+    "🌍 International (BBC/Reuters)": "https://feeds.bbci.co.uk/news/world/rss.xml",
     "🇺🇸 National & Trending (AP/Google)": "https://news.google.com/rss?hl=en-US&gl=US&ceid=US:en",
     "🦅 Trump Tracker (X/Google Bridge)": (
         "https://news.google.com/rss/search"
