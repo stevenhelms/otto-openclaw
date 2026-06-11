@@ -8,7 +8,7 @@ BASE_IMAGE="${BASE_IMAGE:-openclaw-sandbox:bookworm-slim}"
 TARGET_IMAGE="${TARGET_IMAGE:-openclaw-sandbox-common:bookworm-slim}"
 
 # 1. Added python3-pip and python3-venv to the system packages
-PACKAGES="${PACKAGES:-curl wget jq coreutils grep nodejs npm python3 python3-pip python3-venv git ca-certificates golang-go rustc cargo unzip pkg-config libasound2-dev build-essential file dnsutils}"
+PACKAGES="${PACKAGES:-curl wget jq coreutils grep nodejs npm python3 python3-pip python3-venv git ca-certificates golang-go rustc cargo unzip pkg-config libasound2-dev build-essential file dnsutils gnupg}"
 
 # 2. Define your default Python libraries here (space-separated)
 PYTHON_PACKAGES="${PYTHON_PACKAGES:-numpy pandas requests python-dotenv googlemaps bs4 matplotlib seaborn}" 
